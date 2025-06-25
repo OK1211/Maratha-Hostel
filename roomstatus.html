@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Room Status - Maratha Hostel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #eef3f7;
+      padding: 30px;
+    }
+    h2 {
+      text-align: center;
+      color: #003366;
+      margin-bottom: 20px;
+    }
+    table {
+      margin: auto;
+      width: 90%;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+    th {
+      background-color: #003366;
+      color: white;
+    }
+    .full {
+      color: red;
+      font-weight: bold;
+    }
+    .available {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Maratha Hostel – Room Status Overview</h2>
+
+  <table>
+    <tr>
+      <th>Room No</th>
+      <th>Status</th>
+      <th>Vacancy</th>
+    </tr>
+    <script>
+      const roomList = [
+        101,102,103,104,105,
+        201,202,203,204,205,206,207,208,209,210,
+        301,302,303,304,305,306,307,308,309,310,
+        401,402,403,404,405,406,407,408,409,410
+      ];
+
+      roomList.forEach(room => {
+        let vacantCount = 0;
+
+        for (let i = 1; i <= 4; i++) {
+          const key = `r${room}_${i}`;
+          const status = localStorage.getItem(key) || "full";
+          if (status.toLowerCase() === "available") {
+            vacantCount++;
+          }
+        }
+
+        const statusText = vacantCount === 0 ? "Full" : "Available";
+        const statusClass = vacantCount === 0 ? "full" : "available";
+
+        document.write(`
+          <tr>
+            <td>${room}</td>
+            <td class="${statusClass}">${statusText}</td>
+            <td>${vacantCount}</td>
+          </tr>
+        `);
+      });
+    </script>
+  </table>
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin | Maratha Hostel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #003366, #005599);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .admin-panel {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 600px;
+    }
+    h2 {
+      text-align: center;
+      color: #003366;
+      margin-bottom: 25px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin: 10px 0 5px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    button {
+      background-color: #003366;
+      color: white;
+      margin-top: 15px;
+      cursor: pointer;
+      border: none;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #005599;
+    }
+    .message {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .logout {
+      background-color: red;
+    }
+    hr {
+      margin: 30px 0 15px;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-panel">
+    <h2>Admin Panel</h2>
+
+    <!-- Login Form -->
+    <div id="loginForm">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter admin username" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter password" required />
+
+      <button onclick="checkLogin()">Login</button>
+      <p class="message" id="loginMsg"></p>
+    </div>
+
+    <!-- Update Room Form -->
+    <div id="updateForm" style="display: none;">
+      <h3 style="text-align: center; color: #003366;">Set Room Slot Status</h3>
+
+      <label for="room">Room Number</label>
+      <select id="room"></select>
+
+      <div class="grid">
+        <div>
+          <label for="slot1">Slot 1</label>
+          <select id="slot1">
+            <option value="full">Full</option>
+            <option value="available">Available</option>
+          </select>
+        </div>
+        <div>
+          <label for="slot2">Slot 2</label>
+          <select id="slot2">
+            <option value="full">Full</option>
+            <option value="available">Available</option>
+          </select>
+        </div>
+        <div>
+          <label for="slot3">Slot 3</label>
+          <select id="slot3">
+            <option value="full">Full</option>
+            <option value="available">Available</option>
+          </select>
+        </div>
+        <div>
+          <label for="slot4">Slot 4</label>
+          <select id="slot4">
+            <option value="full">Full</option>
+            <option value="available">Available</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="updateStatus()">Update Room</button>
+      <p class="message" id="statusMsg"></p>
+
+      <hr />
+
+      <!-- Password Change Form -->
+      <h3 style="text-align: center; color: #003366;">Change Admin Password</h3>
+
+      <label for="oldPass">Current Password</label>
+      <input type="password" id="oldPass" placeholder="Current Password" />
+
+      <label for="newPass">New Password</label>
+      <input type="password" id="newPass" placeholder="New Password" />
+
+      <label for="confirmPass">Confirm New Password</label>
+      <input type="password" id="confirmPass" placeholder="Confirm New Password" />
+
+      <button onclick="changePassword()">Change Password</button>
+      <p class="message" id="passMsg"></p>
+
+      <button class="logout" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    const savedPassword = localStorage.getItem("adminPassword") || "1234";
+
+    // Populate room dropdown
+    const rooms = [
+      101,102,103,104,105,
+      201,202,203,204,205,206,207,208,209,210,
+      301,302,303,304,305,306,307,308,309,310,
+      401,402,403,404,405,406,407,408,409,410
+    ];
+    const roomDropdown = document.getElementById("room");
+    rooms.forEach(r => {
+      const option = document.createElement("option");
+      option.value = r;
+      option.textContent = r;
+      roomDropdown.appendChild(option);
+    });
+
+    function checkLogin() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const msg = document.getElementById("loginMsg");
+
+      const storedPass = localStorage.getItem("adminPassword") || "1234";
+
+      if (user === "admin" && pass === storedPass) {
+        sessionStorage.setItem("isAdmin", "true");
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("updateForm").style.display = "block";
+      } else {
+        msg.textContent = "❌ Invalid credentials.";
+        msg.style.color = "red";
+      }
+    }
+
+    function updateStatus() {
+      const room = document.getElementById("room").value;
+      const slots = [
+        document.getElementById("slot1").value,
+        document.getElementById("slot2").value,
+        document.getElementById("slot3").value,
+        document.getElementById("slot4").value
+      ];
+
+      for (let i = 0; i < 4; i++) {
+        localStorage.setItem(`r${room}_${i + 1}`, slots[i]);
+      }
+
+      document.getElementById("statusMsg").textContent = `✅ Room ${room} updated.`;
+      document.getElementById("statusMsg").style.color = "green";
+    }
+
+    function changePassword() {
+      const oldPass = document.getElementById("oldPass").value;
+      const newPass = document.getElementById("newPass").value;
+      const confirmPass = document.getElementById("confirmPass").value;
+      const msg = document.getElementById("passMsg");
+
+      const storedPass = localStorage.getItem("adminPassword") || "1234";
+
+      if (oldPass !== storedPass) {
+        msg.textContent = "❌ Current password is incorrect.";
+        msg.style.color = "red";
+        return;
+      }
+      if (newPass.length < 4) {
+        msg.textContent = "❌ New password must be at least 4 characters.";
+        msg.style.color = "red";
+        return;
+      }
+      if (newPass !== confirmPass) {
+        msg.textContent = "❌ Passwords do not match.";
+        msg.style.color = "red";
+        return;
+      }
+
+      localStorage.setItem("adminPassword", newPass);
+      msg.textContent = "✅ Password changed successfully.";
+      msg.style.color = "green";
+    }
+
+    function logout() {
+      sessionStorage.removeItem("isAdmin");
+      location.reload();
+    }
+
+    // Auto show update panel if already logged in
+    window.onload = () => {
+      if (sessionStorage.getItem("isAdmin") === "true") {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("updateForm").style.display = "block";
+      }
+    };
+  </script>
+</body>
+</html>

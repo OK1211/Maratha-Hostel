@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maratha Hostel - Home</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-flex">
+      <div class="header-left">
+        <img src="c:\Users\Omkar\OneDrive\Pictures\shivajiraje.jpg" alt="Logo" class="logo" />
+        <h1 class="site-title">मराठा विद्यार्थी वसतिगृह, छत्रपती संभाजीनगर</h1>
+      </div>
+      <nav class="navbar">
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="register.html">Register</a>
+        <a href="roomstatus.html">Room Status</a>
+        <a href="contact.html">Contact</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="notice-bar">
+    <p class="scroll-text">
+      मराठा विद्यार्थी वसतिगृह, कोटवालपुरा समर्थ नगर, मध्यवर्ती बसस्थानकाच्या जवळ, छत्रपती संभाजीनगर 431001. | प्रवेश प्रक्रिया सुरू आहे. | कृपया वेळेवर नोंदणी करा. | अधिक माहितीसाठी संपर्क: +919322004094
+    </p>
+  </div>
+
+  <section class="hero">
+    <div class="container">
+      <h2>Welcome To Our Hostel Portal</h2>
+      <a href="register.html" class="btn-primary">Register Now</a>
+    </div>
+  </section>
+
+  <section class="features-gallery-wrapper">
+    <div class="features-column">
+      <div class="feature-card">
+        <h3>Spacious Rooms</h3>
+        <p>36 Rooms, fully furnished with beds, fans, and desks.</p>
+      </div>
+      <div class="feature-card">
+        <h3>24x7 Security</h3>
+        <p>Security guards and CCTV surveillance throughout campus.</p>
+      </div>
+    </div>
+
+    <div class="gallery-center">
+      <h2 style="text-align:center">Hostel Gallery</h2>
+      <div class="carousel">
+        <img class="slide" src="c:\Users\Omkar\OneDrive\Pictures\Hostel 1.webp" alt="Hostel Image 1">
+        <img class="slide" src="c:\Users\Omkar\OneDrive\Pictures\hostel 8.webp" alt="Hostel Image 2">
+        <img class="slide" src="c:\Users\Omkar\OneDrive\Pictures\hostel9.webp" alt="Hostel Image 3">
+        <img class="slide" src="c:\Users\Omkar\OneDrive\Pictures\Hostel 4.webp" alt="Hostel Image 4">
+         
+
+        <div class="carousel-buttons">
+          <button class="prev">&#10094;</button>
+          <button class="next">&#10095;</button>
+        </div>
+        <div class="dots-container">
+          <span class="dot" data-index="0"></span>
+          <span class="dot" data-index="1"></span>
+          <span class="dot" data-index="2"></span>
+          <span class="dot" data-index="3"></span>
+          <span class="dot" data-index="4"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="features-column">
+      <div class="feature-card">
+        <h3>Mess Facility</h3>
+        <p>Nutritious meals provided in our dining hall.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Auditorium & Library</h3>
+        <p>Auditorium with projector + Library with 1000+ books.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>&copy; 2025 मराठा विद्यार्थी वसतिगृह. All rights reserved.</p>
+    <div class="footer-container">
+      <div class="social-icons">
+        <a href="https://facebook.com" target="_blank" title="Facebook">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+        </a>
+        <a href="https://twitter.com" target="_blank" title="Twitter">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter">
+        </a>
+        <a href="https://instagram.com" target="_blank" title="Instagram">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram">
+        </a>
+        <a href="https://linkedin.com" target="_blank" title="LinkedIn">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn">
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let currentIndex = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prev = document.querySelector('.prev');
+    const next = document.querySelector('.next');
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.style.display = i === index ? 'block' : 'none';
+        dots[i].classList.toggle('active', i === index);
+      });
+    }
+
+    prev.onclick = () => {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      showSlide(currentIndex);
+    };
+
+    next.onclick = () => {
+      currentIndex = (currentIndex + 1) % slides.length;
+      showSlide(currentIndex);
+    };
+
+    dots.forEach(dot => {
+      dot.onclick = () => {
+        currentIndex = parseInt(dot.dataset.index);
+        showSlide(currentIndex);
+      };
+    });
+
+    showSlide(currentIndex);
+  </script>
+</body>
+</html>
