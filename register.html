@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Register | Maratha Hostel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -16,46 +16,70 @@
     }
     .form-container {
       background: #fff;
-      padding: 30px;
-      border-radius: 10px;
+      padding: 40px;
+      border-radius: 12px;
       width: 90%;
       max-width: 500px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     }
-    input, button {
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .form-container img.logo {
+      display: block;
+      margin: 0 auto 10px;
+      max-width: 80px;
+    }
+    input, select, button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-bottom: 15px;
       border-radius: 6px;
       border: 1px solid #ccc;
+      font-size: 15px;
     }
     button {
       background: #2575fc;
       color: #fff;
       font-weight: bold;
-      border: none;
+      cursor: pointer;
     }
     button:hover {
       background: #1a5ed9;
+    }
+    #message {
+      text-align: center;
+      color: green;
+      margin-top: 10px;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
   <div class="form-container">
-    <h2>Student Registration</h2>
+    <img src="Website_Logo.jpg" class="logo" alt="Hotel Logo" />
+    <h2>Hotel Guest Registration</h2>
     <form id="registrationForm">
-      <input type="text" id="name" placeholder="Full Name" required>
-      <input type="number" id="age" placeholder="Age" required>
-      <input type="text" id="room" placeholder="Room No" required>
-      <input type="date" id="date" required>
-      <input type="number" id="contactnumber" placeholder="Contact Number" required>
-      <input type="file" id="photoUpload" accept="image/*">
-      <button type="submit">Submit</button>
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="tel" id="contactnumber" placeholder="Contact Number" pattern="[0-9]{10}" required />
+      <input type="text" id="room" placeholder="Room Number (e.g., 204)" required />
+      <select id="roomtype" required>
+        <option value="">Select Room Type</option>
+        <option value="Single">Single</option>
+        <option value="Double">Double</option>
+        <option value="Suite">Suite</option>
+      </select>
+      <input type="number" id="guests" placeholder="Number of Guests" min="1" max="10" required />
+      <input type="date" id="checkin" required />
+      <input type="date" id="checkout" required />
+      <input type="file" id="photoUpload" accept="image/*" />
+      <button type="submit">Submit Registration</button>
     </form>
     <p id="message"></p>
   </div>
 
-  <!-- ✅ Your script goes here -->
   <script>
     const form = document.getElementById("registrationForm");
     const message = document.getElementById("message");
@@ -64,13 +88,15 @@
       e.preventDefault();
 
       const name = document.getElementById("name").value.trim();
-      const age = document.getElementById("age").value.trim();
-      const room = document.getElementById("room").value.trim();
-      const dob = document.getElementById("date").value.trim();
       const contact = document.getElementById("contactnumber").value.trim();
+      const room = document.getElementById("room").value.trim();
+      const roomtype = document.getElementById("roomtype").value;
+      const guests = document.getElementById("guests").value;
+      const checkin = document.getElementById("checkin").value;
+      const checkout = document.getElementById("checkout").value;
       const photoFile = document.getElementById("photoUpload").files[0];
 
-      if (!name || !age || !room || !dob || !contact) {
+      if (!name || !contact || !room || !roomtype || !guests || !checkin || !checkout) {
         alert("Please fill all required fields.");
         return;
       }
@@ -80,21 +106,24 @@
         photoBase64 = await toBase64(photoFile);
       }
 
-      const student = {
+      const guest = {
         name,
-        age,
-        room,
-        dob,
         contact,
+        room,
+        roomtype,
+        guests,
+        checkin,
+        checkout,
         photo: photoBase64,
         registeredAt: new Date().toLocaleString()
       };
 
-      let students = JSON.parse(localStorage.getItem("students")) || [];
-      students.push(student);
-      localStorage.setItem("students", JSON.stringify(students));
+      let guestList = JSON.parse(localStorage.getItem("guestList")) || [];
+      guestList.push(guest);
+      localStorage.setItem("guestList", JSON.stringify(guestList));
 
-      showReceipt(student);
+      showReceipt(guest);
+      message.textContent = "Registration successful! Receipt is ready to print.";
       form.reset();
     };
 
@@ -107,29 +136,31 @@
       });
     }
 
-    function showReceipt(student) {
+    function showReceipt(guest) {
       const receiptWindow = window.open("", "_blank", "width=600,height=800");
       receiptWindow.document.write(`
         <html>
           <head>
-            <title>Registration Receipt</title>
+            <title>Guest Registration Receipt</title>
             <style>
               body { font-family: 'Poppins'; padding: 30px; background: #f0f0f0; }
               h2 { text-align: center; color: #003366; }
-              .info { margin: 15px 0; }
+              .info { margin: 15px 0; font-size: 16px; }
               img { max-width: 150px; display: block; margin: 10px auto; border-radius: 10px; }
               button { display: block; margin: 20px auto; padding: 10px 20px; background: #003366; color: white; border: none; border-radius: 5px; }
             </style>
           </head>
           <body>
-            <h2>Maratha Hostel Registration Receipt</h2>
-            <div class="info"><strong>Name:</strong> ${student.name}</div>
-            <div class="info"><strong>Age:</strong> ${student.age}</div>
-            <div class="info"><strong>Room No:</strong> ${student.room}</div>
-            <div class="info"><strong>Date of Birth:</strong> ${student.dob}</div>
-            <div class="info"><strong>Contact No:</strong> ${student.contact}</div>
-            <div class="info"><strong>Registered At:</strong> ${student.registeredAt}</div>
-            ${student.photo ? `<img src="${student.photo}" alt="Photo">` : ""}
+            <h2>Maratha Hotel - Guest Registration Receipt</h2>
+            <div class="info"><strong>Name:</strong> ${guest.name}</div>
+            <div class="info"><strong>Contact No:</strong> ${guest.contact}</div>
+            <div class="info"><strong>Room No:</strong> ${guest.room}</div>
+            <div class="info"><strong>Room Type:</strong> ${guest.roomtype}</div>
+            <div class="info"><strong>No. of Guests:</strong> ${guest.guests}</div>
+            <div class="info"><strong>Check-in:</strong> ${guest.checkin}</div>
+            <div class="info"><strong>Check-out:</strong> ${guest.checkout}</div>
+            <div class="info"><strong>Registered At:</strong> ${guest.registeredAt}</div>
+            ${guest.photo ? `<img src="${guest.photo}" alt="Guest Photo">` : ""}
             <button onclick="window.print()">Print Receipt</button>
           </body>
         </html>
